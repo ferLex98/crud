@@ -5,8 +5,11 @@ import {
   BeforeUpdate,
   Entity,
   CreateDateColumn,
+  OneToMany,
+  JoinColumn,
 } from 'typeorm';
 import { hash } from 'bcryptjs';
+import { Persona } from 'src/persona/entities';
 
 
 @Entity('users')
@@ -28,6 +31,19 @@ export class User {
 
   @CreateDateColumn({name:'created_at', type: 'timestamp'})
   createdAt: Date;
+
+  @OneToMany(
+    () => Persona,
+    (tPersona) => tPersona.idPersona
+  )
+  listaCabeceraPersona: Persona[];
+
+  @JoinColumn([
+    {
+        name: "id",
+        referencedColumnName: "idPersona",
+    },
+])
 
   @BeforeInsert()
   @BeforeUpdate()

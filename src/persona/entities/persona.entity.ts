@@ -24,4 +24,7 @@ export class Persona {
     @Column({type: 'varchar', length: 255, nullable: true})
     tags: string;
 
+    @Column({nullable: true})
+    idPersona: number;
+
 }
