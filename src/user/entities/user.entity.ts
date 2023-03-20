@@ -31,19 +31,9 @@ export class User {
 
   @CreateDateColumn({name:'created_at', type: 'timestamp'})
   createdAt: Date;
-
-  @OneToMany(
-    () => Persona,
-    (tPersona) => tPersona.idPersona
-  )
-  listaCabeceraPersona: Persona[];
-
-  @JoinColumn([
-    {
-        name: "id",
-        referencedColumnName: "idPersona",
-    },
-])
+  
+  @Column()
+  idPersona: number;
 
   @BeforeInsert()
   @BeforeUpdate()
