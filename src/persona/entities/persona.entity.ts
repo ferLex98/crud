@@ -1,30 +1,63 @@
-import { type } from "os";
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
+
+import { Etiqueta } from "src/etiqueta/entities/etiqueta.entity";
+import { Publicacion } from "src/publicaciones/entities";
+import { User } from "src/user/entities";
+import { Column, Entity, JoinColumn, OneToMany, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity('persona')
 export class Persona {
-    @PrimaryGeneratedColumn()
-    id: number
+    
+    @PrimaryGeneratedColumn({name: 'id_persona'})
+    idPersona: number
 
-    @Column({type: 'varchar', length: 20, unique: true, nullable: true})
-    identificacion: string;
+    @Column("character varying", {
+        name: 'identificacion',
+        length: 20, 
+        unique: true, 
+        nullable: true,
+    })
+    identificacion: string | null;
 
-    @Column({type: 'varchar', length: 2, nullable: true})
-    tipoIdentificacion:string;
+    @Column("character varying", {
+        name: 'tipo_identificacion',
+        length: 2,
+        nullable: true
+    })
+    tipoIdentificacion:string | null;
 
-    @Column({type: 'varchar', length:100, nullable: true})
+    @Column("character varying",{
+        name: 'nombre',
+        length:100, 
+        nullable: true})
     nombre: string;
 
-    @Column({type: 'varchar', length:100, nullable: true})
+    @Column("character varying",{
+        name: 'apellido', 
+        length:100, 
+        nullable: true})
     apellidos: string;
 
-    @Column({type: 'int',nullable: true})
+    @Column("integer",{
+        name: 'edad',
+        nullable: true
+    })
     edad: number;
 
-    @Column({type: 'varchar', length: 255, nullable: true})
+    @Column("character varying",{
+        name: 'tag',
+        length: 255, 
+        nullable: true
+    })
     tags: string;
+    
+    @OneToMany(()=> User, (user)=> user.persona) 
+    user:User[];
 
-    @Column({nullable: true})
-    idPersona: number;
+    @OneToMany(()=> Publicacion, (publicacion)=> publicacion.persona) 
+    listaPublicacion:Publicacion[];
+
+    @OneToMany(()=> Etiqueta, (etiqueta)=> etiqueta.persona) 
+    listaEtiqueta:Etiqueta[];
+  
 
 }

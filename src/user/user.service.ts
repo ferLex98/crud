@@ -1,8 +1,12 @@
 import { Injectable, NotFoundException, BadRequestException, Logger, InternalServerErrorException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { createQueryBuilder, Repository } from 'typeorm';
 import { User } from './entities';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreateUserDto, EditUserDto } from './dtos';
+import { Persona } from 'src/persona/entities';
+import { plainToClass } from 'class-transformer';
+import { hash } from 'bcryptjs';
+import { PersonaService } from 'src/persona/persona.service';
 
 
 @Injectable()
@@ -10,8 +14,8 @@ export class UserService {
 
   logger = new Logger();
   constructor(
-    @InjectRepository(User)
-    private readonly userRepository: Repository<User>,
+    @InjectRepository(User) private readonly userRepository: Repository<User>,
+    
   ) {
     
   }
@@ -27,8 +31,7 @@ export class UserService {
   }
 
   async createOne(dto?: CreateUserDto){
-    const userExist = await this.userRepository.findOneBy({email: dto.email})
-    if(userExist) throw new NotFoundException('User already exists')
+      console.log(dto);
 
     const newUser = this.userRepository.create(dto)
     const user = await this.userRepository.save(newUser);
@@ -37,44 +40,7 @@ export class UserService {
 
   }
 
-/*
-  async createOne(dto?: CreateUserDto) { 
-    
-    console.log('creando persona: dtoServi',dto);
-    const personaExistente = await this.userRepository.findOneBy({
-      email: dto.email,
-    });
 
-    if (personaExistente)
-    throw new BadRequestException(
-      'Persona ya registrada: ',
-      dto.email,
-    );
-
-    const user = new User();
-
-    const nuevaPersona = Object.assign(user, dto);
-
-    console.log(':::: dto:  ', dto);
-    console.log(':::: newUser Created:  ', nuevaPersona);
-
-    try {
-      const personaCrear = this.userRepository.create(nuevaPersona);
-      console.log('Create user: ', personaCrear);
-
-      const personaCreada = await this.userRepository.save(personaCrear);
-
-      console.log('User created: ', personaCreada);
-
-      return dto;
-    } catch (err) {
-      this.logger.error('Error persona.service, crearPersona: ', err.message);
-      throw new InternalServerErrorException(err.message);
-    }
-  
-    
-  }
- */ 
   async editOne(id: any, dto: EditUserDto) {
     const user = await this.getOne(id)   
     const editedUser = Object.assign(user, dto);
@@ -85,4 +51,24 @@ export class UserService {
     const user = await this.getOne(id);
     return await this.userRepository.remove(user);
   }
+
+  async login(username2: string){
+    console.log(username2);
+  
+    const userLogin = await this.userRepository
+    .createQueryBuilder('us')
+    .select([
+      `us.id as id`,
+      `us.username as "username"`,
+      `us.email as "email"`,
+      `us.password as "password"`,
+      `us.status as "status"`,
+      `us.created_date as "created_date"`,
+    ])
+    .where('us.username= :username', { username: username2})
+    .getRawMany()
+   
+    return userLogin;
+  }
 }
+  

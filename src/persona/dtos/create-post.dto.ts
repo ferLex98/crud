@@ -3,6 +3,9 @@ import { EnumToString } from "src/helpers/enumToString";
 import { PostCategory } from "../enums/post-categori.enum";
 
 export class CreatePostDto {
+
+    idPersona: number
+    
     @IsString()
     identificacion: string;
 
