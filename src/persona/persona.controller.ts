@@ -44,7 +44,7 @@ export class PersonaController {
 
     @Put(':id_persona')
     async editPerson(
-        @Param('id_persona') id:number,
+         id:number,
         @Body() dto:EditPostDto
     ){
         return this.personaService.editPerson(id, dto)

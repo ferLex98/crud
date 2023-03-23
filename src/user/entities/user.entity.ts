@@ -44,7 +44,7 @@ export class User {
     default: true})
   status: boolean;
 
-  @Column({name: 'id_persona' })
+  @Column({name: 'id_persona', nullable: true })
   idPersona: number;
 
   @Column("timestamp without time zone", {
