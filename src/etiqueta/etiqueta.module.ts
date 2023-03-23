@@ -15,6 +15,4 @@ import { EtiquetaService } from './etiqueta.service';
 })
 export class EtiquetaModule {}
 
-
-//commennt 
                       
