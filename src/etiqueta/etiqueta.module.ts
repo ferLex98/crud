@@ -14,4 +14,7 @@ import { EtiquetaService } from './etiqueta.service';
   exports: [EtiquetaService]  
 })
 export class EtiquetaModule {}
+
+
+//commennt text
                       
