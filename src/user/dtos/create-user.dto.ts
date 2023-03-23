@@ -1,6 +1,9 @@
-import { IsEmail, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { Type } from "@nestjs/class-transformer";
+import { IsEmail, IsNumber, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
 
 export class CreateUserDto {
+
+  id:number;
 
   @IsString()
   username: string;
@@ -10,6 +13,10 @@ export class CreateUserDto {
 
   @IsString()
   password: string;
+
+  @IsNumber()
+  @Type(() => Number)
+  idPersona: number;
   
 
 }
