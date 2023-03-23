@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EditPostDto } from 'src/persona/dtos';
 import { Repository } from 'typeorm';
@@ -24,11 +24,36 @@ export class EtiquetaService {
         return guardarEtiqueta;
     }
 
-    async updateEtiqueta(id: number, dto?:UpdateEtiquetaDto): Promise<Etiqueta> {
+    async updateEtiqueta(id_etiqueta: number, dto?:UpdateEtiquetaDto): Promise<Etiqueta> {
         const findPersona = await this.etiquetaRepository.findOneBy({id_etiqueta})
-        if(!findPersona) throw new BadRequestException('User nor fund');
+        if(!findPersona) throw new BadRequestException('Etiqueta no encontrada ');
  
         const editPerson = Object.assign(findPersona, dto);
-        return await this.personaRepository.save(editPerson);
+        return await this.etiquetaRepository.save(editPerson);
+    }
+
+    async deleteEtiqueta(id_etiqueta:number){
+        const findPersona = await this.etiquetaRepository.findOneBy({id_etiqueta})
+        if(!findPersona) throw new BadRequestException('Etiqueta no encontrada');
+        
+        
+        return await this.etiquetaRepository.delete(id_etiqueta); 
+    }
+
+    async getTicketByUser(username: string){
+        const etiquetados = await this.etiquetaRepository
+        .createQueryBuilder('et')
+        .select([
+            'us.username',
+            'us.email',
+            'et.id_etiqueta',
+            'et.descripcion',
+        ])
+        .innerJoin("et.publicacion", 'pub')
+        .innerJoin("pub.persona", 'per')
+        .innerJoin("per.user", 'us')
+        .where("us.username = :username", { username: username })
+        .getRawMany()
+        return etiquetados
     }
 }

@@ -37,26 +37,19 @@ export class UserController {
 
     
       const data = await this.userService.login(username);
-    //  console.log("Password:"+Json(data));
-     
-      return{
-        message: 'User information',
-        data
-      }
-      /*
-      if(data && (await compare(password, password ))){
-        
+      const passwordObtained= data[0]['password']
+      if(data && (await compare(password, passwordObtained ))){
+        return{
+          message: 'User found',
+          data
+        }
       }else{
         return{
           message: 'Invalid credentials',
-        }
       }
-      */
+    }
 
   }
-
-
-
  
 
   @Post()

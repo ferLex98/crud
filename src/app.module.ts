@@ -28,7 +28,7 @@ import { Etiqueta } from './etiqueta/entities';
       Persona,
       Etiqueta,
     ],
-    synchronize: true,
+    synchronize: false,
     logging: true
   }), 
   UserModule,

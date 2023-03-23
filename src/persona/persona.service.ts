@@ -43,8 +43,8 @@ export class PersonaService {
         return await this.personaRepository.save(persona);
     }
 
-    async editPerson(id: number, dto: EditPostDto){
-       const findPersona = await this.personaRepository.findOneById(id)
+    async editPerson(idPersona: number, dto: EditPostDto){
+       const findPersona = await this.personaRepository.findOneBy({idPersona})
        if(!findPersona) throw new BadRequestException('User nor fund');
 
        const editPerson = Object.assign(findPersona, dto);
