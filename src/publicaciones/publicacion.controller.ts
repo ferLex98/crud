@@ -1,6 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
-import { CreatePostDto, EditPostDto } from 'src/persona/dtos';
-import { CreatePostsDto } from './dtos/create-post.dto';
+import { CreatePostsDto, EditPostsDto } from './dtos';
 import { PublicacionService } from './publicacion.service';
 
 @Controller('publicacion')
@@ -18,7 +17,9 @@ export class PublicacionController {
     }
 
     @Get(':id_publicacion')
-    async getMany(id:number) {
+    async getMany(
+        @Param('id_publicacion') id:number,
+    ) {
         const data = await this.publicacionService.getMany(id);
         return {
             message: "Data retrieved",
@@ -36,7 +37,7 @@ export class PublicacionController {
     @Put(':id_publicacion')
     async updatePost(
         @Param('id_publicacion') id:number,
-        @Body() dto: EditPostDto,
+        @Body() dto: EditPostsDto,
     ) {
         const data = await this.publicacionService.updatePost(id, dto);
         return {
@@ -46,7 +47,9 @@ export class PublicacionController {
     }
 
     @Delete(':id_publicacion')
-    async deletePost(id) {
+    async deletePost(
+        @Param('id_publicacion') id:number,
+    ) {
         const data = await this.publicacionService.deletePost(id);
         return {
             message: "Data deleted",
