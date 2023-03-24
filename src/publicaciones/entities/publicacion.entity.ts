@@ -9,8 +9,8 @@ export class Publicacion {
     idPublicacion: number;
    
     @Column("character varying",{
-         length:'255',
-          nullable: true
+        length:'255',
+        nullable: true
     })
     description:string;
 

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto, EditPostDto } from 'src/persona/dtos';
 import { Repository } from 'typeorm';
@@ -20,8 +20,8 @@ export class PublicacionService {
     }
 
     
-    async getMany(id: number) {
-        const existPost = await this.publicacionesRepository.findOneById(id);
+    async getMany(idPublicacion: number) {
+        const existPost = await this.publicacionesRepository.findOneBy({idPublicacion});
 
         if(!existPost) throw new NotFoundException()
 
@@ -34,18 +34,20 @@ export class PublicacionService {
         return await this.publicacionesRepository.save(post);
     }
 
-   
-    async updatePost(id:number, dto?: EditPostDto) {
-        const existPost = await this.publicacionesRepository.findOneById(id);
-        if(!existPost) throw new NotFoundException()
 
-        const editPost = Object.assign(existPost, dto);
+
+    async updatePost(idPublicacion: number, dto: EditPostDto){
+       const findPost = await this.publicacionesRepository.findOneBy({idPublicacion})
+       if(!findPost) throw new BadRequestException('Post dont found');
+
+       const editPost = Object.assign(findPost, dto);
        return await this.publicacionesRepository.save(editPost);
+
     }
 
 
-    async deletePost(id) {
-        return await this.publicacionesRepository.delete(id);
+    async deletePost(id_publicacion: number) {
+        return await this.publicacionesRepository.delete(id_publicacion);
     }
 
     
